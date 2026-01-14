@@ -1,8 +1,18 @@
+import { useEffect } from "react";
+import { useAuth } from "@clerk/clerk-react";
 import { Outlet } from "react-router";
-import Navbar from "../components/Navbar";
+// import { setGetTokenFn } from "../lib/axios.js";
+import { setGetTokenFn } from "../lib/axios";
 import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 
 function DashboardLayout() {
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    setGetTokenFn(getToken);
+  }, [getToken]);
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" defaultChecked />
