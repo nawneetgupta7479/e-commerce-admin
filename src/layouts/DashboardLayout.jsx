@@ -20,7 +20,7 @@ function DashboardLayout() {
       <div className="drawer-content">
         <Navbar />
 
-        <main className="p-6">
+        <main className="p-6 max-sm:p-3">
           <Outlet />
         </main>
       </div>

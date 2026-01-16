@@ -117,15 +117,15 @@ function ProductsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* HEADER */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Products</h1>
-          <p className="text-base-content/70 mt-1">Manage your product inventory</p>
+          <h1 className="text-xl sm:text-2xl font-bold">Products</h1>
+          <p className="text-base-content/70 mt-1 text-sm sm:text-base">Manage your product inventory</p>
         </div>
-        <button onClick={() => setShowModal(true)} className="btn btn-primary gap-2">
-          <PlusIcon className="w-5 h-5" />
+        <button onClick={() => setShowModal(true)} className="btn btn-primary gap-2 btn-sm sm:btn-md w-full sm:w-auto">
+          <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           Add Product
         </button>
       </div>
@@ -137,9 +137,20 @@ function ProductsPage() {
 
           return (
             <div key={product._id} className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <div className="flex items-center gap-6">
-                  <div className="avatar">
+              <div className="card-body p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                  {/* Image and Badge - Mobile Layout */}
+                  <div className="flex items-start justify-between sm:hidden">
+                    <div className="avatar">
+                      <div className="w-16 rounded-xl">
+                        <img src={product.images[0]} alt={product.name} />
+                      </div>
+                    </div>
+                    <div className={`badge badge-sm ${status.class}`}>{status.text}</div>
+                  </div>
+
+                  {/* Image - Desktop */}
+                  <div className="avatar hidden sm:block">
                     <div className="w-20 rounded-xl">
                       <img src={product.images[0]} alt={product.name} />
                     </div>
@@ -148,38 +159,40 @@ function ProductsPage() {
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="card-title">{product.name}</h3>
-                        <p className="text-base-content/70 text-sm">{product.category}</p>
+                        <h3 className="card-title text-base sm:text-lg">{product.name}</h3>
+                        <p className="text-base-content/70 text-xs sm:text-sm">{product.category}</p>
                       </div>
-                      <div className={`badge ${status.class}`}>{status.text}</div>
+                      {/* Badge - Desktop */}
+                      <div className={`badge hidden sm:flex ${status.class}`}>{status.text}</div>
                     </div>
-                    <div className="flex items-center gap-6 mt-4">
+                    <div className="flex items-center gap-4 sm:gap-6 mt-3 sm:mt-4">
                       <div>
                         <p className="text-xs text-base-content/70">Price</p>
-                        <p className="font-bold text-lg">${product.price}</p>
+                        <p className="font-bold text-base sm:text-lg">${product.price}</p>
                       </div>
                       <div>
                         <p className="text-xs text-base-content/70">Stock</p>
-                        <p className="font-bold text-lg">{product.stock} units</p>
+                        <p className="font-bold text-base sm:text-lg">{product.stock} units</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="card-actions">
+                  {/* Actions */}
+                  <div className="card-actions justify-end sm:justify-start border-t sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
                     <button
-                      className="btn btn-square btn-ghost"
+                      className="btn btn-sm sm:btn-md btn-square btn-ghost"
                       onClick={() => handleEdit(product)}
                     >
-                      <PencilIcon className="w-5 h-5" />
+                      <PencilIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                     <button
-                      className="btn btn-square btn-ghost text-error"
+                      className="btn btn-sm sm:btn-md btn-square btn-ghost text-error"
                       onClick={() => deleteProductMutation.mutate(product._id)}
                     >
                       {deleteProductMutation.isPending ? (
-                        <span className="loading loading-spinner"></span>
+                        <span className="loading loading-spinner loading-sm"></span>
                       ) : (
-                        <Trash2Icon className="w-5 h-5" />
+                        <Trash2Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       )}
                     </button>
                   </div>
@@ -194,10 +207,10 @@ function ProductsPage() {
 
       <input type="checkbox" className="modal-toggle" checked={showModal} />
 
-      <div className="modal">
-        <div className="modal-box max-w-2xl">
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box max-w-2xl max-h-[90vh] sm:max-h-[85vh]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-2xl">
+            <h3 className="font-bold text-xl sm:text-2xl">
               {editingProduct ? "Edit Product" : "Add New Product"}
             </h3>
 
@@ -207,16 +220,16 @@ function ProductsPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="form-control">
                 <label className="label">
-                  <span>Product Name</span>
+                  <span className="text-sm sm:text-base">Product Name</span>
                 </label>
 
                 <input
                   type="text"
                   placeholder="Enter product name"
-                  className="input input-bordered"
+                  className="input input-bordered input-sm sm:input-md"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
@@ -225,10 +238,10 @@ function ProductsPage() {
 
               <div className="form-control">
                 <label className="label">
-                  <span>Category</span>
+                  <span className="text-sm sm:text-base">Category</span>
                 </label>
                 <select
-                  className="select select-bordered"
+                  className="select select-bordered select-sm sm:select-md"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   required
@@ -245,13 +258,13 @@ function ProductsPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="form-control">
                 <label className="label">
-                  <span>Price ($)</span>
+                  <span className="text-sm sm:text-base">Price ($)</span>
                 </label>
                 <input
                   type="number"
                   step="0.01"
                   placeholder="0.00"
-                  className="input input-bordered"
+                  className="input input-bordered input-sm sm:input-md"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                   required
@@ -260,12 +273,12 @@ function ProductsPage() {
 
               <div className="form-control">
                 <label className="label">
-                  <span>Stock</span>
+                  <span className="text-sm sm:text-base">Stock</span>
                 </label>
                 <input
                   type="number"
                   placeholder="0"
-                  className="input input-bordered"
+                  className="input input-bordered input-sm sm:input-md"
                   value={formData.stock}
                   onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
                   required
@@ -275,10 +288,10 @@ function ProductsPage() {
 
             <div className="form-control flex flex-col gap-2">
               <label className="label">
-                <span>Description</span>
+                <span className="text-sm sm:text-base">Description</span>
               </label>
               <textarea
-                className="textarea textarea-bordered h-24 w-full"
+                className="textarea textarea-bordered h-20 sm:h-24 w-full text-sm sm:text-base"
                 placeholder="Enter product description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -288,20 +301,20 @@ function ProductsPage() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-semibold text-base flex items-center gap-2">
-                  <ImageIcon className="h-5 w-5" />
+                <span className="label-text font-semibold text-sm sm:text-base flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                   Product Images
                 </span>
                 <span className="label-text-alt text-xs opacity-60">Max 3 images</span>
               </label>
 
-              <div className="bg-base-200 rounded-xl p-4 border-2 border-dashed border-base-300 hover:border-primary transition-colors">
+              <div className="bg-base-200 rounded-xl p-3 sm:p-4 border-2 border-dashed border-base-300 hover:border-primary transition-colors">
                 <input
                   type="file"
                   accept="image/*"
                   multiple
                   onChange={handleImageChange}
-                  className="file-input file-input-bordered file-input-primary w-full"
+                  className="file-input file-input-bordered file-input-primary file-input-sm sm:file-input-md w-full"
                   required={!editingProduct}
                 />
 
@@ -313,10 +326,10 @@ function ProductsPage() {
               </div>
 
               {imagePreviews.length > 0 && (
-                <div className="flex gap-2 mt-2">
+                <div className="flex flex-wrap gap-2 mt-2">
                   {imagePreviews.map((preview, index) => (
                     <div key={index} className="avatar">
-                      <div className="w-20 rounded-lg">
+                      <div className="w-14 sm:w-20 rounded-lg">
                         <img src={preview} alt={`Preview ${index + 1}`} />
                       </div>
                     </div>
@@ -325,11 +338,11 @@ function ProductsPage() {
               )}
             </div>
 
-            <div className="modal-action">
+            <div className="modal-action flex-col sm:flex-row gap-2 sm:gap-0">
               <button
                 type="button"
                 onClick={closeModal}
-                className="btn"
+                className="btn btn-sm sm:btn-md w-full sm:w-auto"
                 disabled={createProductMutation.isPending || updateProductMutation.isPending}
               >
                 Cancel
@@ -337,11 +350,11 @@ function ProductsPage() {
 
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-primary btn-sm sm:btn-md w-full sm:w-auto"
                 disabled={createProductMutation.isPending || updateProductMutation.isPending}
               >
                 {createProductMutation.isPending || updateProductMutation.isPending ? (
-                  <span className="loading loading-spinner"></span>
+                  <span className="loading loading-spinner loading-sm"></span>
                 ) : editingProduct ? (
                   "Update Product"
                 ) : (
