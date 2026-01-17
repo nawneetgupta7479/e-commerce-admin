@@ -47,3 +47,24 @@ export const customerApi = {
     return data;
   },
 };
+
+export const issueApi = {
+  getAll: async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.status) params.append("status", filters.status);
+    if (filters.type) params.append("type", filters.type);
+    const queryString = params.toString();
+    const { data } = await axiosInstance.get(`/admin/issues${queryString ? `?${queryString}` : ""}`);
+    return data;
+  },
+
+  getById: async (issueId) => {
+    const { data } = await axiosInstance.get(`/admin/issues/${issueId}`);
+    return data;
+  },
+
+  markResolved: async (issueId) => {
+    const { data } = await axiosInstance.patch(`/admin/issues/${issueId}/resolve`);
+    return data;
+  },
+};
