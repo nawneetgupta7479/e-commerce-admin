@@ -23,8 +23,16 @@ export const productApi = {
 };
 
 export const orderApi = {
-  getAll: async () => {
-    const { data } = await axiosInstance.get("/admin/orders");
+  getAll: async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.status) params.append("status", filters.status);
+    const queryString = params.toString();
+    const { data } = await axiosInstance.get(`/admin/orders${queryString ? `?${queryString}` : ""}`);
+    return data;
+  },
+
+  getById: async (orderId) => {
+    const { data } = await axiosInstance.get(`/admin/orders/${orderId}`);
     return data;
   },
 
